@@ -32,6 +32,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	private static final String RESOURCES_WQUEEN_PNG = "wqueen.png";
 	private static final String RESOURCES_WPAWN_PNG = "wpawn.png";
 	private static final String RESOURCES_BPAWN_PNG = "bpawn.png";
+
+    private static final String RESOURCES_BASS_PNG = "bass.png";
+    private static final String RESOURCES_WASS_PNG = "wass.png";
 	
 	// Logical and graphical representations of board
 	private final Square[][] board;
@@ -59,10 +62,13 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         this.addMouseMotionListener(this);
 
         //TO BE IMPLEMENTED FIRST
-     
-      //for (.....)  
-//        	populate the board with squares here. Note that the board is composed of 64 squares alternating from 
-//        	white to black.
+        for (int num1 = 0; num1 < 8; num1++) {
+            for (int num2 = 0; num2 < 8; num2++) {
+                boolean bColor = !(((num1 % 2 == 0) && !(num2 % 2 == 0)) || (!(num1 % 2 == 0) && (num2 % 2 == 0)));
+                board[num1][num2]= new Square(this, bColor, num1, num2);
+                this.add(board[num1][num2]);
+            }
+        }
 
         initializePieces();
 
@@ -80,9 +86,41 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	//since we only have one kind of piece for now you need only set the same number of pieces on either side.
 	//it's up to you how you wish to arrange your pieces.
     private void initializePieces() {
-    	
-    	board[0][0].put(new Piece(true, RESOURCES_WKING_PNG));
+    	board[0][0].put(new Piece(false, RESOURCES_BROOK_PNG));
+    	board[0][1].put(new Piece(false, RESOURCES_BKNIGHT_PNG));
+        board[0][2].put(new Piece(false, RESOURCES_BBISHOP_PNG));
+        board[0][3].put(new Piece(false, RESOURCES_BQUEEN_PNG));
+        board[0][4].put(new Piece(false, RESOURCES_BKING_PNG));
+        board[0][5].put(new Piece(false, RESOURCES_BBISHOP_PNG));
+        board[0][6].put(new Piece(false, RESOURCES_BKNIGHT_PNG));
+        board[0][7].put(new Piece(false, RESOURCES_BROOK_PNG));
 
+        board[1][0].put(new Piece(false, RESOURCES_BPAWN_PNG));
+    	board[1][1].put(new Piece(false, RESOURCES_BPAWN_PNG));
+        board[1][2].put(new Piece(false, RESOURCES_BPAWN_PNG));
+        board[1][3].put(new Piece(false, RESOURCES_BASS_PNG));
+        board[1][4].put(new Piece(false, RESOURCES_BASS_PNG));
+        board[1][5].put(new Piece(false, RESOURCES_BPAWN_PNG));
+        board[1][6].put(new Piece(false, RESOURCES_BPAWN_PNG));
+        board[1][7].put(new Piece(false, RESOURCES_BPAWN_PNG));
+
+        board[6][0].put(new Piece(true, RESOURCES_WPAWN_PNG));
+    	board[6][1].put(new Piece(true, RESOURCES_WPAWN_PNG));
+        board[6][2].put(new Piece(true, RESOURCES_WPAWN_PNG));
+        board[6][3].put(new Piece(true, RESOURCES_WASS_PNG));
+        board[6][4].put(new Piece(true, RESOURCES_WASS_PNG));
+        board[6][5].put(new Piece(true, RESOURCES_WPAWN_PNG));
+        board[6][6].put(new Piece(true, RESOURCES_WPAWN_PNG));
+        board[6][7].put(new Piece(true, RESOURCES_WPAWN_PNG));
+        
+        board[7][0].put(new Piece(true, RESOURCES_WROOK_PNG));
+    	board[7][1].put(new Piece(true, RESOURCES_WKNIGHT_PNG));
+        board[7][2].put(new Piece(true, RESOURCES_WBISHOP_PNG));
+        board[7][3].put(new Piece(true, RESOURCES_WQUEEN_PNG));
+        board[7][4].put(new Piece(true, RESOURCES_WKING_PNG));
+        board[7][5].put(new Piece(true, RESOURCES_WBISHOP_PNG));
+        board[7][6].put(new Piece(true, RESOURCES_WKNIGHT_PNG));
+        board[7][7].put(new Piece(true, RESOURCES_WROOK_PNG));
     }
 
     public Square[][] getSquareArray() {
@@ -110,34 +148,37 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
                 if(sq == fromMoveSquare)
                 	 sq.setBorder(BorderFactory.createLineBorder(Color.blue));
                 sq.paintComponent(g);
-                
             }
         }
     	if (currPiece != null) {
-            if ((currPiece.getColor() && whiteTurn)
-                    || (!currPiece.getColor()&& !whiteTurn)) {
+            if ((currPiece.getColor() == whiteTurn)) {
                 final Image img = currPiece.getImage();
                 g.drawImage(img, currX, currY, null);
             }
         }
-        
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        currX = e.getX();
-        currY = e.getY();
+        currX = e.getX() - 24;
+        currY = e.getY() - 24;
 
         Square sq = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
 
+        currPiece = sq.getOccupyingPiece();
         if (sq.isOccupied()) {
-            currPiece = sq.getOccupyingPiece();
-            fromMoveSquare = sq;
-            if (!currPiece.getColor() && whiteTurn)
-                return;
-            if (currPiece.getColor() && !whiteTurn)
-                return;
-            sq.setDisplay(false);
+            if (currPiece.getColor() == whiteTurn) {
+                fromMoveSquare = sq;
+                if (!currPiece.getColor() && whiteTurn)
+                    return;
+                if (currPiece.getColor() && !whiteTurn)
+                    return;
+                sq.setDisplay(false);
+
+                for(Square s: currPiece.getLegalMoves(board, fromMoveSquare)) {
+                    s.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
+                }
+            }
         }
         repaint();
     }
@@ -150,8 +191,22 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     public void mouseReleased(MouseEvent e) {
         Square endSquare = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
         
-        //using currPiece
+        ArrayList<Square> legal = currPiece.getLegalMoves(board, fromMoveSquare);
+        //ArrayList<Square> controlled = currPiece.getControlledSquares(board, fromMoveSquare);
         
+        if (legal.contains(endSquare)) {
+            endSquare.put(fromMoveSquare.removePiece());
+            whiteTurn = !whiteTurn;
+        }
+        // else if (controlled.contains(endSquare)) {
+        //endSquare.put(fromMoveSquare.removePiece());
+        //}
+
+        for(Square [] row: board) {
+        	for(Square s: row) {
+        		s.setBorder(null);
+        	}
+        }
        
         fromMoveSquare.setDisplay(true);
         currPiece = null;
