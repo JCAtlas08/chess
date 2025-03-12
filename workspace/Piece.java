@@ -90,7 +90,8 @@ public class Piece {
     //returns an arraylist of squares which are legal to move to
     //please note that your piece must have some sort of logic. Just being able to move to every square on the board is not
     //going to score any points.
-    public ArrayList<Square> getLegalMoves(Square[][] board, Square start){ //Can only move up two spaces, or one space back diagonally
+    public ArrayList<Square> getLegalMoves(Board b, Square start){ //Can only move up two spaces, or one space back diagonally
+      Square[][] board = b.getSquareArray();
       ArrayList<Square> legalSquares = new ArrayList<Square>();
       ArrayList<Integer> gridRange = new ArrayList<Integer>();
       for (int i = 0; i < 8; i++) {

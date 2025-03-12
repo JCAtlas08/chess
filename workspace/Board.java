@@ -165,19 +165,15 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 
         Square sq = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
 
-        currPiece = sq.getOccupyingPiece();
         if (sq.isOccupied()) {
-            if (currPiece.getColor() == whiteTurn) {
+            if (sq.getOccupyingPiece().getColor() == whiteTurn) {
+                currPiece = sq.getOccupyingPiece();
                 fromMoveSquare = sq;
                 if (!currPiece.getColor() && whiteTurn)
                     return;
                 if (currPiece.getColor() && !whiteTurn)
                     return;
                 sq.setDisplay(false);
-
-                for(Square s: currPiece.getLegalMoves(board, fromMoveSquare)) {
-                    s.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
-                }
             }
         }
         repaint();
@@ -191,7 +187,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     public void mouseReleased(MouseEvent e) {
         Square endSquare = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
         
-        ArrayList<Square> legal = currPiece.getLegalMoves(board, fromMoveSquare);
+        ArrayList<Square> legal = currPiece.getLegalMoves(this, fromMoveSquare);
         //ArrayList<Square> controlled = currPiece.getControlledSquares(board, fromMoveSquare);
         
         if (legal.contains(endSquare)) {
@@ -217,7 +213,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     public void mouseDragged(MouseEvent e) {
         currX = e.getX() - 24;
         currY = e.getY() - 24;
-
+        for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)) {
+            s.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
+        }
         repaint();
     }
 
