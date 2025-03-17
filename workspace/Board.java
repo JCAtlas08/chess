@@ -44,7 +44,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     private boolean whiteTurn;
 
     //if the player is currently dragging a piece this variable contains it.
-    private Piece currPiece;
+    private Assasin currPiece;
     private Square fromMoveSquare;
     
     //used to keep track of the x/y coordinates of the mouse.
@@ -86,41 +86,41 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	//since we only have one kind of piece for now you need only set the same number of pieces on either side.
 	//it's up to you how you wish to arrange your pieces.
     private void initializePieces() {
-    	board[0][0].put(new Piece(false, RESOURCES_BROOK_PNG));
-    	board[0][1].put(new Piece(false, RESOURCES_BKNIGHT_PNG));
-        board[0][2].put(new Piece(false, RESOURCES_BBISHOP_PNG));
-        board[0][3].put(new Piece(false, RESOURCES_BQUEEN_PNG));
-        board[0][4].put(new Piece(false, RESOURCES_BKING_PNG));
-        board[0][5].put(new Piece(false, RESOURCES_BBISHOP_PNG));
-        board[0][6].put(new Piece(false, RESOURCES_BKNIGHT_PNG));
-        board[0][7].put(new Piece(false, RESOURCES_BROOK_PNG));
+    	board[0][0].put(new Assasin(false, RESOURCES_BROOK_PNG));
+    	board[0][1].put(new Assasin(false, RESOURCES_BKNIGHT_PNG));
+        board[0][2].put(new Assasin(false, RESOURCES_BBISHOP_PNG));
+        board[0][3].put(new Assasin(false, RESOURCES_BQUEEN_PNG));
+        board[0][4].put(new Assasin(false, RESOURCES_BKING_PNG));
+        board[0][5].put(new Assasin(false, RESOURCES_BBISHOP_PNG));
+        board[0][6].put(new Assasin(false, RESOURCES_BKNIGHT_PNG));
+        board[0][7].put(new Assasin(false, RESOURCES_BROOK_PNG));
 
-        board[1][0].put(new Piece(false, RESOURCES_BPAWN_PNG));
-    	board[1][1].put(new Piece(false, RESOURCES_BPAWN_PNG));
-        board[1][2].put(new Piece(false, RESOURCES_BPAWN_PNG));
-        board[1][3].put(new Piece(false, RESOURCES_BASS_PNG));
-        board[1][4].put(new Piece(false, RESOURCES_BASS_PNG));
-        board[1][5].put(new Piece(false, RESOURCES_BPAWN_PNG));
-        board[1][6].put(new Piece(false, RESOURCES_BPAWN_PNG));
-        board[1][7].put(new Piece(false, RESOURCES_BPAWN_PNG));
+        board[1][0].put(new Assasin(false, RESOURCES_BPAWN_PNG));
+    	board[1][1].put(new Assasin(false, RESOURCES_BPAWN_PNG));
+        board[1][2].put(new Assasin(false, RESOURCES_BPAWN_PNG));
+        board[1][3].put(new Assasin(false, RESOURCES_BASS_PNG));
+        board[1][4].put(new Assasin(false, RESOURCES_BASS_PNG));
+        board[1][5].put(new Assasin(false, RESOURCES_BPAWN_PNG));
+        board[1][6].put(new Assasin(false, RESOURCES_BPAWN_PNG));
+        board[1][7].put(new Assasin(false, RESOURCES_BPAWN_PNG));
 
-        board[6][0].put(new Piece(true, RESOURCES_WPAWN_PNG));
-    	board[6][1].put(new Piece(true, RESOURCES_WPAWN_PNG));
-        board[6][2].put(new Piece(true, RESOURCES_WPAWN_PNG));
-        board[6][3].put(new Piece(true, RESOURCES_WASS_PNG));
-        board[6][4].put(new Piece(true, RESOURCES_WASS_PNG));
-        board[6][5].put(new Piece(true, RESOURCES_WPAWN_PNG));
-        board[6][6].put(new Piece(true, RESOURCES_WPAWN_PNG));
-        board[6][7].put(new Piece(true, RESOURCES_WPAWN_PNG));
+        board[6][0].put(new Assasin(true, RESOURCES_WPAWN_PNG));
+    	board[6][1].put(new Assasin(true, RESOURCES_WPAWN_PNG));
+        board[6][2].put(new Assasin(true, RESOURCES_WPAWN_PNG));
+        board[6][3].put(new Assasin(true, RESOURCES_WASS_PNG));
+        board[6][4].put(new Assasin(true, RESOURCES_WASS_PNG));
+        board[6][5].put(new Assasin(true, RESOURCES_WPAWN_PNG));
+        board[6][6].put(new Assasin(true, RESOURCES_WPAWN_PNG));
+        board[6][7].put(new Assasin(true, RESOURCES_WPAWN_PNG));
         
-        board[7][0].put(new Piece(true, RESOURCES_WROOK_PNG));
-    	board[7][1].put(new Piece(true, RESOURCES_WKNIGHT_PNG));
-        board[7][2].put(new Piece(true, RESOURCES_WBISHOP_PNG));
-        board[7][3].put(new Piece(true, RESOURCES_WQUEEN_PNG));
-        board[7][4].put(new Piece(true, RESOURCES_WKING_PNG));
-        board[7][5].put(new Piece(true, RESOURCES_WBISHOP_PNG));
-        board[7][6].put(new Piece(true, RESOURCES_WKNIGHT_PNG));
-        board[7][7].put(new Piece(true, RESOURCES_WROOK_PNG));
+        board[7][0].put(new Assasin(true, RESOURCES_WROOK_PNG));
+    	board[7][1].put(new Assasin(true, RESOURCES_WKNIGHT_PNG));
+        board[7][2].put(new Assasin(true, RESOURCES_WBISHOP_PNG));
+        board[7][3].put(new Assasin(true, RESOURCES_WQUEEN_PNG));
+        board[7][4].put(new Assasin(true, RESOURCES_WKING_PNG));
+        board[7][5].put(new Assasin(true, RESOURCES_WBISHOP_PNG));
+        board[7][6].put(new Assasin(true, RESOURCES_WKNIGHT_PNG));
+        board[7][7].put(new Assasin(true, RESOURCES_WROOK_PNG));
     }
 
     public Square[][] getSquareArray() {
@@ -131,11 +131,11 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         return whiteTurn;
     }
 
-    public void setCurrPiece(Piece p) {
+    public void setCurrPiece(Assasin p) {
         this.currPiece = p;
     }
 
-    public Piece getCurrPiece() {
+    public Assasin getCurrPiece() {
         return this.currPiece;
     }
 
@@ -187,36 +187,38 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     public void mouseReleased(MouseEvent e) {
         Square endSquare = (Square) this.getComponentAt(new Point(e.getX(), e.getY()));
         
-        ArrayList<Square> legal = currPiece.getLegalMoves(this, fromMoveSquare);
-        //ArrayList<Square> controlled = currPiece.getControlledSquares(board, fromMoveSquare);
-        
-        if (legal.contains(endSquare)) {
-            endSquare.put(fromMoveSquare.removePiece());
-            whiteTurn = !whiteTurn;
-        }
-        // else if (controlled.contains(endSquare)) {
-        //endSquare.put(fromMoveSquare.removePiece());
-        //}
+        if (currPiece != null) {
+            ArrayList<Square> legal = currPiece.getLegalMoves(this, fromMoveSquare);
+            //ArrayList<Square> controlled = currPiece.getControlledSquares(this, fromMoveSquare);
+            
+            if (legal.contains(endSquare)) {
+                endSquare.put(fromMoveSquare.removePiece());
+                whiteTurn = !whiteTurn;
+            }
 
-        for(Square [] row: board) {
-        	for(Square s: row) {
-        		s.setBorder(null);
-        	}
+            for(Square [] row: board) {
+                for(Square s: row) {
+                    s.setBorder(null);
+                }
+            }
+        
+            fromMoveSquare.setDisplay(true);
+            currPiece = null;
+            repaint();
         }
-       
-        fromMoveSquare.setDisplay(true);
-        currPiece = null;
-        repaint();
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
         currX = e.getX() - 24;
         currY = e.getY() - 24;
-        for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)) {
-            s.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
+
+        if (currPiece != null) {
+            for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)) {
+                s.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
+            }
+            repaint();
         }
-        repaint();
     }
 
     @Override
