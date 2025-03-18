@@ -14,6 +14,10 @@ import javax.imageio.ImageIO;
 //Assassin
 //The assassin works like a pon, capturing diagonally, however, only being able to do so backwards.
 //The assassin may also move 1-2 spaces forward, and 1 space back.
+//    []      ([] = movable squares)
+//    []
+//    ()      (() = player position)
+//  XXXXXX    (XX = capturable/moveable squares)
 
 public class Assassin extends Piece {
   
@@ -53,10 +57,8 @@ public class Assassin extends Piece {
     return controlledSquares;
   }
   
-  //Can only move up two spaces                               []
-  //or one space back, one space back diagonally              []
-  //and can only capture one space back  and diagonally       XX
-  //Looks like this (if white) (XX is player position) ---> [][][]
+  //Precondition: the current board with all positions and the square of the placed last clicked (not null)
+  //Postcondition: returns an arrayList containing every space that the piece can legally move into/capture
   public ArrayList<Square> getLegalMoves(Board b, Square start){ 
     Square[][] board = b.getSquareArray();
     ArrayList<Square> legalSquares = new ArrayList<Square>();
@@ -113,6 +115,6 @@ public class Assassin extends Piece {
   }
 
   public String toString() {
-    return "A " + super.toString() + " Assasin";
+    return "A " + super.toString() + " Assassin";
   }
 }
