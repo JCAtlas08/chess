@@ -21,6 +21,8 @@ public class Assassin extends Piece {
     super(isWhite, img_file);
   }
 
+  //Precondition: 2d array of type board and the square of the placed last clicked (not null)
+  //Postcondition: returns an arrayList containing every space that the piece could capture
   public ArrayList<Square> getControlledSquares(Square[][] board, Square start) {
     ArrayList<Square> controlledSquares = new ArrayList<Square>();
     ArrayList<Integer> gridRange = new ArrayList<Integer>();
@@ -38,15 +40,8 @@ public class Assassin extends Piece {
       sColor = -1;
     }
     
-    if (gridRange.contains(row + sColor)) { // One space in front
-      controlledSquares.add(board[row + sColor][col]);
-    }
-    if (gridRange.contains(row + (2 * sColor))) { // Two spaces in front
-      controlledSquares.add(board[row + (2 * sColor)][col]);
-    }
-
     if (gridRange.contains(row - sColor)) { // One space back
-      controlledSquares.add(board[row - sColor][col]);
+      controlledSquares.add(board[row - sColor][col - 1]);
     }
     if (gridRange.contains(row - sColor) && gridRange.contains(col - 1)) { // One space back diagonally (left)
       controlledSquares.add(board[row - sColor][col - 1]);
@@ -60,7 +55,7 @@ public class Assassin extends Piece {
   
   //Can only move up two spaces                               []
   //or one space back, one space back diagonally              []
-  //and can only capture one space back diagonally            XX
+  //and can only capture one space back  and diagonally       XX
   //Looks like this (if white) (XX is player position) ---> [][][]
   public ArrayList<Square> getLegalMoves(Board b, Square start){ 
     Square[][] board = b.getSquareArray();
@@ -84,13 +79,13 @@ public class Assassin extends Piece {
 
     if (gridRange.contains(row + sColor)) {
       spot = board[row + sColor][col]; // One space in front
-      if (!spot.isOccupied() || (spot.isOccupied() && spot.getOccupyingPiece().getColor() != pColor)) {
+      if (!spot.isOccupied()) {
         legalSquares.add(spot);
       }
     }
     if (gridRange.contains(row + (2 * sColor))) {
       spot = board[row + (2 * sColor)][col]; // Two spaces in front
-      if (!spot.isOccupied() || (spot.isOccupied() && spot.getOccupyingPiece().getColor() != pColor)) {
+      if (!spot.isOccupied()) {
         legalSquares.add(spot);
       }
     }
