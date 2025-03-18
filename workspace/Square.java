@@ -17,7 +17,7 @@ public class Square extends JComponent {
     //true for white, false for black.
     private final boolean color;
     //if there's a piece on the square this stores it. If there isn't this stores null.
-    private Assasin occupyingPiece;
+    private Assassin occupyingPiece;
     
     //if desired you can use this to retain the piece where it is but make it invisible to the user. 
     //True means to display the piece. This property will be switched to false when we are dragging a piece around while choosing our next move.
@@ -44,7 +44,7 @@ public class Square extends JComponent {
         return this.color;
     }
     
-    public Assasin getOccupyingPiece() {
+    public Assassin getOccupyingPiece() {
         return occupyingPiece;
     }
     
@@ -64,12 +64,12 @@ public class Square extends JComponent {
         this.dispPiece = v;
     }
     
-    public void put(Assasin p) {
+    public void put(Assassin p) {
         this.occupyingPiece = p;
     }
     
-    public Assasin removePiece() {
-        Assasin p = this.occupyingPiece;
+    public Assassin removePiece() {
+        Assassin p = this.occupyingPiece;
         this.occupyingPiece = null;
         return p;
     }

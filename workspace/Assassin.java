@@ -9,9 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
-public class Assasin extends Piece {
+//Joshua Campbell
+
+//Assassin
+//The assassin works like a pon, capturing diagonally, however, only being able to do so backwards.
+//The assassin may also move 1-2 spaces forward, and 1 space back.
+
+public class Assassin extends Piece {
   
-  public Assasin(boolean isWhite, String img_file) {
+  public Assassin(boolean isWhite, String img_file) {
     super(isWhite, img_file);
   }
 
