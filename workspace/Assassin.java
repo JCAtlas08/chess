@@ -114,6 +114,8 @@ public class Assassin extends Piece {
     return legalSquares;
   }
 
+  //Precondition: none
+  //Postcondition: returns a string containing another string from parent class piece
   public String toString() {
     return "A " + super.toString() + " Assassin";
   }
