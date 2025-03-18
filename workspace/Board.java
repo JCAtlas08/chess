@@ -44,7 +44,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     private boolean whiteTurn;
 
     //if the player is currently dragging a piece this variable contains it.
-    private Assassin currPiece;
+    private Piece currPiece;
     private Square fromMoveSquare;
     
     //used to keep track of the x/y coordinates of the mouse.
@@ -90,7 +90,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     	board[0][1].put(new Assassin(false, RESOURCES_BKNIGHT_PNG));
         board[0][2].put(new Assassin(false, RESOURCES_BBISHOP_PNG));
         board[0][3].put(new Assassin(false, RESOURCES_BQUEEN_PNG));
-        board[0][4].put(new Assassin(false, RESOURCES_BKING_PNG));
+        board[0][4].put(new King(false, RESOURCES_BKING_PNG));
         board[0][5].put(new Assassin(false, RESOURCES_BBISHOP_PNG));
         board[0][6].put(new Assassin(false, RESOURCES_BKNIGHT_PNG));
         board[0][7].put(new Assassin(false, RESOURCES_BROOK_PNG));
@@ -117,7 +117,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     	board[7][1].put(new Assassin(true, RESOURCES_WKNIGHT_PNG));
         board[7][2].put(new Assassin(true, RESOURCES_WBISHOP_PNG));
         board[7][3].put(new Assassin(true, RESOURCES_WQUEEN_PNG));
-        board[7][4].put(new Assassin(true, RESOURCES_WKING_PNG));
+        board[7][4].put(new King(true, RESOURCES_WKING_PNG));
         board[7][5].put(new Assassin(true, RESOURCES_WBISHOP_PNG));
         board[7][6].put(new Assassin(true, RESOURCES_WKNIGHT_PNG));
         board[7][7].put(new Assassin(true, RESOURCES_WROOK_PNG));
@@ -135,7 +135,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         this.currPiece = p;
     }
 
-    public Assassin getCurrPiece() {
+    public Piece getCurrPiece() {
         return this.currPiece;
     }
 
