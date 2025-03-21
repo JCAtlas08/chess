@@ -217,19 +217,13 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
                     //DOES NOT CHANGE THE PIECE HISTORY
 
                 } else {
-                    System.out.println("\nCheck for undo made");
                     if (track < history[0][0].size() - 1) { //If there was an undo made
-                        System.out.println("Undo found");
                         clearHistory(track); //Clear the history past the index
-                        System.out.println(history[0][0].size());
-                    } else {
-                        System.out.println("No undo");
                     }
 
-                    System.out.println("\nRecording History"); //If no check, no change | Piece History
+                    //If no check, no change | Piece History
                     recordHistory();
                     track++; //Move on in time (index) through the piece history
-                    System.out.println(track);
 
                     whiteTurn = !whiteTurn; //End turn
                 }
@@ -326,72 +320,34 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     public void clearHistory(int idx) {
         int temp = history[0][0].size() - (idx + 1);
 
-        System.out.println("\nClearing history");
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++) {
                 for (int i = 0; i < temp; i++) {
-                    System.out.println("At (" + r + ", "+ c + "), trial: " + i);
-                    System.out.println(squareHistory(board[r][c]));
-
-                    System.out.println("Removing: " + history[r][c].removeLast()); //Removes the last item in the arraylist
-                    System.out.println(squareHistory(board[r][c]));
+                    history[r][c].removeLast(); //Removes the last item in the arraylist
                 }
             }
         }
     }
 
     public void undo() {
-        /*
-        System.out.println("\nUndo Pressed | Record of Pieces");
-        for (Square[] r : board) {
-            for (Square c : r) {
-                if (c.getOccupyingPiece() != null) {
-                    System.out.println(c.getOccupyingPiece().toString() + " at (" + c.getRow() + ", " + c.getCol() +")");
-                } else {
-                    System.out.println("No piece at (" + c.getRow() + ", " + c.getCol() +")");
-                }
-            }
-        }
-        */
-
         if (track > 0) {
             track--;
 
-            System.out.println("\nTracking at index: " + track);
             for (int r = 0; r < 8; r++) {
                 for (int c = 0; c < 8; c++) {
                     Square s = board[r][c];
 
-                    System.out.println("\nAt (" + r + ", " + c + ")");
-                    System.out.println(squareHistory(s));
-
                     if (getPieceInHistory(s, track) != null) {
-                        System.out.println("Trying to replace " + board[r][c].getOccupyingPiece() + " with " + getPieceInHistory(s, 0));
-                        System.out.println(track);
-
                         board[r][c].put(history[r][c].get(track));
-                    } else {
-                        System.out.println("Trying to replace " + board[r][c].getOccupyingPiece() + " with null");
 
+                    } else {
                         board[r][c].put(null);
                     }
                 }
             }
+
             whiteTurn = !whiteTurn;
         }
-
-        /*
-        System.out.println("\nAfter Undo | Record of pieces:");
-        for (Square[] r : board) {
-            for (Square c : r) {
-                if (c.getOccupyingPiece() != null) {
-                    System.out.println(c.getOccupyingPiece() + " at (" + c.getRow() + ", " + c.getCol() +")");
-                } else {
-                    System.out.println("No piece at (" + c.getRow() + ", " + c.getCol() +")");
-                }
-            }
-        }
-        */
 
         repaint();
     }
@@ -400,28 +356,22 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         if (track < history[0][0].size() - 1) {
             track++;
 
-            System.out.println("\nTracking at index: " + track);
             for (int r = 0; r < 8; r++) {
                 for (int c = 0; c < 8; c++) {
                     Square s = board[r][c];
 
-                    System.out.println("\nAt (" + r + ", " + c + ")");
-                    System.out.println(squareHistory(s));
-
                     if (getPieceInHistory(s, track) != null) {
-                        System.out.println("Trying to replace " + board[r][c].getOccupyingPiece() + " with " + getPieceInHistory(s, 0));
-                        System.out.println(track);
-
                         board[r][c].put(history[r][c].get(track));
-                    } else {
-                        System.out.println("Trying to replace " + board[r][c].getOccupyingPiece() + " with null");
 
+                    } else {
                         board[r][c].put(null);
                     }
                 }
             }
+
             whiteTurn = !whiteTurn;
         }
+
         repaint();
     }
 
