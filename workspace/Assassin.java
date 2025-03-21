@@ -39,13 +39,13 @@ public class Assassin extends Piece {
     int sColor;
 
     if (this.getColor()) {
-      sColor = 1;
-    } else {
       sColor = -1;
+    } else {
+      sColor = 1;
     }
     
     if (gridRange.contains(row - sColor)) { // One space back
-      controlledSquares.add(board[row - sColor][col - 1]);
+      controlledSquares.add(board[row - sColor][col]);
     }
     if (gridRange.contains(row - sColor) && gridRange.contains(col - 1)) { // One space back diagonally (left)
       controlledSquares.add(board[row - sColor][col - 1]);

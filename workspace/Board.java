@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,11 +52,22 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     private int currX;
     private int currY;
     
+    //used to track the history of every piece that's been on a square
+    private ArrayList<Piece>[][] history;
+    private int track = 0;
 
     
     public Board(GameWindow g) {
         this.g = g;
         board = new Square[8][8];
+
+        history = new ArrayList[8][8]; //All of this junk is to initialize each arraylist in all 64 squares
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                history[r][c] = new ArrayList<Piece>();
+            }
+        }
+
         setLayout(new GridLayout(8, 8, 0, 0));
 
         this.addMouseListener(this);
@@ -78,7 +90,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         this.setSize(new Dimension(400, 400));
 
         whiteTurn = true;
-
     }
 
     
@@ -86,6 +97,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 	//since we only have one kind of piece for now you need only set the same number of pieces on either side.
 	//it's up to you how you wish to arrange your pieces.
     private void initializePieces() {
+        //Place pieces
     	board[0][0].put(new Assassin(false, RESOURCES_BROOK_PNG));
     	board[0][1].put(new Assassin(false, RESOURCES_BKNIGHT_PNG));
         board[0][2].put(new Assassin(false, RESOURCES_BBISHOP_PNG));
@@ -121,6 +133,9 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         board[7][5].put(new Assassin(true, RESOURCES_WBISHOP_PNG));
         board[7][6].put(new Assassin(true, RESOURCES_WKNIGHT_PNG));
         board[7][7].put(new Assassin(true, RESOURCES_WROOK_PNG));
+
+        //Board History
+        recordHistory();
     }
 
     public Square[][] getSquareArray() {
@@ -189,14 +204,38 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         
         if (currPiece != null) {
             ArrayList<Square> legal = currPiece.getLegalMoves(this, fromMoveSquare);
-            //ArrayList<Square> controlled = currPiece.getControlledSquares(this, fromMoveSquare);
             
-            if (legal.contains(endSquare)) {
-                endSquare.put(fromMoveSquare.removePiece());
-                whiteTurn = !whiteTurn;
+            if (legal.contains(endSquare)) { //If a legal move
+                Piece pred = fromMoveSquare.removePiece(); // !!!Still removes the piece that was originally there!!!
+                Piece prey = endSquare.getOccupyingPiece(); // !!!Does nothing to the endSquare!!!
+
+                endSquare.put(pred);
+
+                if (isInCheck(currPiece.getColor())) { //If the move you just did put your king in check, undo
+                    fromMoveSquare.put(pred);
+                    endSquare.put(prey);
+                    //DOES NOT CHANGE THE PIECE HISTORY
+
+                } else {
+                    System.out.println("\nCheck for undo made");
+                    if (track < history[0][0].size() - 1) { //If there was an undo made
+                        System.out.println("Undo found");
+                        clearHistory(track); //Clear the history past the index
+                        System.out.println(history[0][0].size());
+                    } else {
+                        System.out.println("No undo");
+                    }
+
+                    System.out.println("\nRecording History"); //If no check, no change | Piece History
+                    recordHistory();
+                    track++; //Move on in time (index) through the piece history
+                    System.out.println(track);
+
+                    whiteTurn = !whiteTurn; //End turn
+                }
             }
 
-            for(Square [] row: board) {
+            for(Square [] row: board) { //Reset borders
                 for(Square s: row) {
                     s.setBorder(null);
                 }
@@ -214,7 +253,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         currY = e.getY() - 24;
 
         if (currPiece != null) {
-            for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)) {
+            for(Square s: currPiece.getLegalMoves(this, fromMoveSquare)) { //Display all legal moves
                 s.setBorder(BorderFactory.createLineBorder(Color.MAGENTA));
             }
             repaint();
@@ -237,4 +276,180 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
     public void mouseExited(MouseEvent e) {
     }
 
+    //precondition - the board is initialized and contains a king of either color. The boolean kingColor corresponds to the color of the king we wish to know the status of.
+    //postcondition - returns true of the king is in check and false otherwise.
+	public boolean isInCheck(boolean kingColor){
+        Square king = null;
+
+		int row = 0;
+        int col = 0;
+        while (col < 8) { //Find king
+            if (row > 7) {
+                row = 0;
+                col++;
+                continue;
+            }
+
+            Square checkSquare = board[row][col];
+            if (checkSquare.isOccupied() && ((checkSquare.getOccupyingPiece() instanceof King) && (checkSquare.getOccupyingPiece().getColor() == kingColor))) {
+                king = checkSquare;
+                break;
+            }
+            
+            row++;
+        }
+
+        row = 0;
+        col = 0;
+        while (col < 8) {
+            if (row > 7) {
+                row = 0;
+                col++;
+                continue;
+            }
+
+            Square tempSquare = board[row][col];
+            if (tempSquare.isOccupied() && (tempSquare.getOccupyingPiece().getColor() != kingColor)) {
+                ArrayList<Square> tempS = tempSquare.getOccupyingPiece().getControlledSquares(board, tempSquare);
+                
+                if (tempS.contains(king)) {
+                    return true;
+                }
+            }
+
+            row++;
+        }
+
+        return false; //If the king is safe
+    }
+
+    public void clearHistory(int idx) {
+        int temp = history[0][0].size() - (idx + 1);
+
+        System.out.println("\nClearing history");
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                for (int i = 0; i < temp; i++) {
+                    System.out.println("At (" + r + ", "+ c + "), trial: " + i);
+                    System.out.println(squareHistory(board[r][c]));
+
+                    System.out.println("Removing: " + history[r][c].removeLast()); //Removes the last item in the arraylist
+                    System.out.println(squareHistory(board[r][c]));
+                }
+            }
+        }
+    }
+
+    public void undo() {
+        /*
+        System.out.println("\nUndo Pressed | Record of Pieces");
+        for (Square[] r : board) {
+            for (Square c : r) {
+                if (c.getOccupyingPiece() != null) {
+                    System.out.println(c.getOccupyingPiece().toString() + " at (" + c.getRow() + ", " + c.getCol() +")");
+                } else {
+                    System.out.println("No piece at (" + c.getRow() + ", " + c.getCol() +")");
+                }
+            }
+        }
+        */
+
+        if (track > 0) {
+            track--;
+
+            System.out.println("\nTracking at index: " + track);
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    Square s = board[r][c];
+
+                    System.out.println("\nAt (" + r + ", " + c + ")");
+                    System.out.println(squareHistory(s));
+
+                    if (getPieceInHistory(s, track) != null) {
+                        System.out.println("Trying to replace " + board[r][c].getOccupyingPiece() + " with " + getPieceInHistory(s, 0));
+                        System.out.println(track);
+
+                        board[r][c].put(history[r][c].get(track));
+                    } else {
+                        System.out.println("Trying to replace " + board[r][c].getOccupyingPiece() + " with null");
+
+                        board[r][c].put(null);
+                    }
+                }
+            }
+            whiteTurn = !whiteTurn;
+        }
+
+        /*
+        System.out.println("\nAfter Undo | Record of pieces:");
+        for (Square[] r : board) {
+            for (Square c : r) {
+                if (c.getOccupyingPiece() != null) {
+                    System.out.println(c.getOccupyingPiece() + " at (" + c.getRow() + ", " + c.getCol() +")");
+                } else {
+                    System.out.println("No piece at (" + c.getRow() + ", " + c.getCol() +")");
+                }
+            }
+        }
+        */
+
+        repaint();
+    }
+
+    public void redo() {
+        if (track < history[0][0].size() - 1) {
+            track++;
+
+            System.out.println("\nTracking at index: " + track);
+            for (int r = 0; r < 8; r++) {
+                for (int c = 0; c < 8; c++) {
+                    Square s = board[r][c];
+
+                    System.out.println("\nAt (" + r + ", " + c + ")");
+                    System.out.println(squareHistory(s));
+
+                    if (getPieceInHistory(s, track) != null) {
+                        System.out.println("Trying to replace " + board[r][c].getOccupyingPiece() + " with " + getPieceInHistory(s, 0));
+                        System.out.println(track);
+
+                        board[r][c].put(history[r][c].get(track));
+                    } else {
+                        System.out.println("Trying to replace " + board[r][c].getOccupyingPiece() + " with null");
+
+                        board[r][c].put(null);
+                    }
+                }
+            }
+            whiteTurn = !whiteTurn;
+        }
+        repaint();
+    }
+
+    public void recordHistory() {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                if (board[r][c].isOccupied()) {
+                    history[r][c].add(board[r][c].getOccupyingPiece());
+                } else {
+                    history[r][c].add(null);
+                }
+            }
+        }
+    }
+
+    public String squareHistory(Square s) { //Used for debugging
+        ArrayList<Piece> p = history[s.getRow()][s.getCol()];
+        String result = "";
+        for (int i = 0; i < p.size(); i++) {
+            result += (p.get(i) + ", ");
+        }
+
+        return result;
+    }
+
+    public Piece getPieceInHistory(Square s, int t) {
+        ArrayList<Piece> p = history[s.getRow()][s.getCol()];
+        
+        return p.get(t);
+    }
 }

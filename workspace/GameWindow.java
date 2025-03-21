@@ -160,7 +160,7 @@ public class GameWindow {
     
     private JPanel buttons() {
         JPanel buttons = new JPanel();
-        buttons.setLayout(new GridLayout(1, 3, 10, 0));
+        buttons.setLayout(new GridLayout(2, 5, 10, 10));
         
         final JButton quit = new JButton("Quit");
         
@@ -176,7 +176,7 @@ public class GameWindow {
                     gameWindow.dispose();
                 }
             }
-          });
+        });
         
         final JButton nGame = new JButton("New game");
         
@@ -192,7 +192,7 @@ public class GameWindow {
                     gameWindow.dispose();
                 }
             }
-          });
+        });
         
         final JButton instr = new JButton("How to play");
         
@@ -200,26 +200,36 @@ public class GameWindow {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(gameWindow,
                 		
-                		
-                		
-                		
                 		// this is the only section you really need to modify (although you're certainly welcome to mess
                 		//with the rest of the file, but do so at your own peril)
-                        " <<<<<<<<<<<<<<<Your instructions go here>>>>>>>>>",
-                        
-                        
-                        
-                        
-                        
+                        " Whites goes first. Pons may only move up 1 space unless beginning from the start, and can only capture diagonally forward 1 space. Rooks move horizontally or vertically infinitely. Knights move in an L shape, and can jump over other pieces. Bishops move diagonally infinitely. Queens can move in any direction infinitely. The non-traditional piece, the Assassin, can move forward 2 spaces, jumping over pieces, or back in any direction 1 space, additionally only being able to capture backwards in any direction 1 space. And finally, Kings can move in any direction one space. The goal is to capture the other colors' King.",
                         
                         "How to play",
                         JOptionPane.PLAIN_MESSAGE);
             }
-          });
+        });
+        
+        final JButton undo = new JButton("Undo");
+    
+        undo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                board.undo();
+            }
+        });
+
+        final JButton redo = new JButton("Redo");
+    
+        redo.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                board.redo();
+            }
+        });
         
         buttons.add(instr);
         buttons.add(nGame);
         buttons.add(quit);
+        buttons.add(undo);
+        buttons.add(redo);
         
         buttons.setPreferredSize(buttons.getMinimumSize());
         
