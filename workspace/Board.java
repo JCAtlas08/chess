@@ -387,16 +387,6 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         }
     }
 
-    public String squareHistory(Square s) { //Used for debugging
-        ArrayList<Piece> p = history[s.getRow()][s.getCol()];
-        String result = "";
-        for (int i = 0; i < p.size(); i++) {
-            result += (p.get(i) + ", ");
-        }
-
-        return result;
-    }
-
     public Piece getPieceInHistory(Square s, int t) {
         ArrayList<Piece> p = history[s.getRow()][s.getCol()];
         
