@@ -20,7 +20,6 @@ import javax.imageio.ImageIO;
 //  XXXXXX    (XX = capturable/moveable squares)
 
 public class Assassin extends Piece {
-  
   public Assassin(boolean isWhite, String img_file) {
     super(isWhite, img_file);
   }
