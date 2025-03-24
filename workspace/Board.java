@@ -194,6 +194,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
 
                 legal = currPiece.getLegalMoves(this, fromMoveSquare);
 
+                /*
                 int i = 0;
                 while (i < legal.size()) {
                     if (checkForCheck(legal.get(i), currPiece.getColor())) {
@@ -202,6 +203,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
                     }
                     i++;
                 }
+                */
 
                 sq.setDisplay(false);
             }
@@ -331,6 +333,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         return false; //If the king is safe
     }
 
+    /*
     public boolean checkForCheck(Square s, boolean c) {
         Piece temp = fromMoveSquare.getOccupyingPiece();
         board[fromMoveSquare.getRow()][fromMoveSquare.getCol()].put(null);
@@ -378,6 +381,7 @@ public class Board extends JPanel implements MouseListener, MouseMotionListener 
         board[fromMoveSquare.getRow()][fromMoveSquare.getCol()].put(temp);
         return false;
     }
+    */
 
     public void clearHistory(int idx) {
         int temp = history[0][0].size() - (idx + 1);
